@@ -1,0 +1,1932 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sesión 01 - Programación Estructurada | UNICAES</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+      /* ==========================================================================
+   SISTEMA DE DISEÑO: DARK MODE TECH (AZUL CIAN) - UNICAES
+   ========================================================================== */
+      :root {
+        --bg-dark: #0f172a; /* Slate 900 */
+        --bg-card: #1e293b; /* Slate 800 */
+        --bg-card-hover: #334155; /* Slate 700 */
+        --cyan-accent: #06b6d4; /* Cyan 500 */
+        --cyan-glow: rgba(6, 182, 212, 0.25);
+        --cyan-light: #67e8f9; /* Cyan 300 */
+        --burgundy-unicaes: #800000;
+        --gold-unicaes: #daa520;
+
+        --text-main: #f8fafc; /* Slate 50 */
+        --text-muted: #94a3b8; /* Slate 400 */
+
+        --code-bg: #090d16;
+        --border-color: #334155;
+
+        --slide-w: 1280px;
+        --slide-h: 720px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #020617;
+        font-family: "Inter", sans-serif;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px 0 80px 0;
+      }
+
+      /* CONTENEDOR DE SLIDE CON MÁXIMA ESTABILIDAD VISUAL */
+      .slide {
+        width: var(--slide-w);
+        height: var(--slide-h);
+        background-color: var(--bg-dark);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        display: none; /* Ocultas por defecto para el control con JS */
+        flex-direction: column;
+        padding: 40px 60px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      }
+
+      .slide.active {
+        display: flex; /* Mostrar diapositiva activa */
+      }
+
+      /* Barra superior de acento */
+      .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--cyan-accent) 0%,
+          var(--gold-unicaes) 50%,
+          var(--burgundy-unicaes) 100%
+        );
+      }
+
+      /* HEADER DEL SLIDE */
+      .slide-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+        height: 50px;
+      }
+
+      .block-tag {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: var(--cyan-accent);
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid var(--cyan-accent);
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .slide-number {
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .slide-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .slide-title i {
+        color: var(--cyan-accent);
+      }
+
+      /* ÁREA DE CONTENIDO */
+      .content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 0;
+        gap: 16px;
+      }
+
+      /* GRID LAYOUTS REUTILIZABLES */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+
+      /* TARJETAS Y CONTENEDORES */
+      .card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-accent {
+        border-left: 4px solid var(--cyan-accent);
+      }
+
+      .card-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 18px;
+        color: var(--cyan-light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .message-box {
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.1) 0%,
+          rgba(30, 41, 59, 0.8) 100%
+        );
+        border: 1px solid var(--cyan-accent);
+        border-radius: 10px;
+        padding: 16px;
+        font-style: italic;
+        color: var(--cyan-light);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 15px;
+      }
+
+      /* TIPOGRAFÍA Y TEXTOS */
+      p,
+      li {
+        font-size: 15px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      strong {
+        color: var(--text-main);
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      ul li {
+        position: relative;
+        padding-left: 20px;
+      }
+
+      ul li::before {
+        content: "➢";
+        position: absolute;
+        left: 0;
+        color: var(--cyan-accent);
+      }
+
+      /* BLOQUES DE CÓDIGO CON RESALTADO CIAN */
+      pre {
+        background-color: var(--code-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 14px 18px;
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        color: #e2e8f0;
+        overflow-x: auto;
+      }
+
+      .code-keyword {
+        color: #f43f5e;
+      } /* Rosa/Rojo C# */
+      .code-type {
+        color: var(--cyan-accent);
+        font-weight: 600;
+      }
+      .code-string {
+        color: #10b981;
+      } /* Verde */
+      .code-func {
+        color: #60a5fa;
+      } /* Azul */
+      .code-comment {
+        color: #64748b;
+        font-style: italic;
+      }
+
+      /* TABLAS ESTILIZADAS */
+      .tech-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .tech-table th {
+        background-color: var(--bg-card);
+        color: var(--cyan-accent);
+        text-align: left;
+        padding: 12px;
+        border-bottom: 2px solid var(--cyan-accent);
+        font-family: "Fira Code", monospace;
+      }
+
+      .tech-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-main);
+      }
+
+      .tech-table tr:nth-child(even) {
+        background-color: rgba(30, 41, 59, 0.4);
+      }
+
+      /* FOOTER DE SLIDE */
+      .slide-footer {
+        height: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: "Fira Code", monospace;
+      }
+
+      .unicaes-badge {
+        color: var(--gold-unicaes);
+        font-weight: 600;
+      }
+
+      /* DIAGRAMAS DE FLUJO */
+      .flow-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--code-bg);
+        padding: 15px 25px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+      }
+
+      .flow-step {
+        background: var(--bg-card);
+        border: 1px solid var(--cyan-accent);
+        color: var(--cyan-light);
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .flow-arrow {
+        color: var(--cyan-accent);
+        font-size: 18px;
+      }
+
+      /* BARRA DE NAVEGACIÓN FLOTANTE (JS) */
+      .nav-bar {
+        position: fixed;
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background-color: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+
+      .nav-btn {
+        background-color: var(--bg-dark);
+        color: var(--cyan-light);
+        border: 1px solid var(--cyan-accent);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .nav-btn:hover:not(:disabled) {
+        background-color: var(--cyan-accent);
+        color: var(--bg-dark);
+        box-shadow: 0 0 10px var(--cyan-glow);
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        border-color: var(--border-color);
+        color: var(--text-muted);
+      }
+
+      .nav-counter {
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        color: var(--text-main);
+        min-width: 90px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide active">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 1: Bienvenida</span>
+        <span class="slide-number">Diapositiva 1 / 32</span>
+      </div>
+      <div
+        class="content-area"
+        style="text-align: center; justify-content: center; gap: 20px"
+      >
+        <div
+          style="
+            color: var(--gold-unicaes);
+            font-family: &quot;Fira Code&quot;, monospace;
+            font-size: 14px;
+            letter-spacing: 2px;
+          "
+        >
+          UNIVERSIDAD CATÓLICA DE EL SALVADOR | CICLO II - 2026
+        </div>
+        <h1
+          style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 44px;
+            color: var(--text-main);
+            line-height: 1.2;
+          "
+        >
+          Programación Estructurada
+        </h1>
+        <p
+          style="
+            font-size: 20px;
+            color: var(--cyan-accent);
+            font-family: &quot;Fira Code&quot;, monospace;
+          "
+        >
+          <i class="fa-solid fa-code"></i> Introducción a C# y .NET
+        </p>
+        <div
+          style="
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 20px">
+            <i
+              class="fa-solid fa-user-gear"
+              style="font-size: 40px; color: var(--cyan-accent)"
+            ></i>
+            <div style="text-align: left">
+              <h3 style="color: var(--text-main); font-size: 18px">
+                👨‍💻 Luis Enrique Vásquez Aquila
+              </h3>
+              <p style="font-size: 14px; color: var(--text-muted)">
+                Perfil académico: Ingeniero en Desarrollo de Software
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="message-box" style="max-width: 800px; margin: 0 auto">
+          <i class="fa-solid fa-quote-left" style="font-size: 24px"></i>
+          <span
+            >"Durante este ciclo aprenderemos los fundamentos de programación
+            utilizando C# para crear soluciones mediante aplicaciones de
+            consola."</span
+          >
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES - Modalidad Presencial</span>
+        <span>Sesión 01</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 1: Bienvenida</span>
+        <span class="slide-number">Diapositiva 2 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-circle-info"></i> Generalidades de la Asignatura
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-university"></i> Información General
+            </div>
+            <ul>
+              <li><strong>Universidad:</strong> Católica de El Salvador</li>
+              <li><strong>Asignatura:</strong> Programación Estructurada</li>
+              <li>
+                <strong>Sección:</strong> B |
+                <strong>Modalidad:</strong> Presencial
+              </li>
+            </ul>
+          </div>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-door-open"></i> Aulas Asignadas
+            </div>
+            <ul>
+              <li><strong>Miércoles:</strong> Aula B46</li>
+              <li><strong>Viernes:</strong> Aula C12</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 10px">
+          <div class="card-title">
+            <i class="fa-solid fa-clock"></i> Horarios Oficiales
+          </div>
+          <div class="grid-2">
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 12px;
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+              "
+            >
+              <strong style="color: var(--cyan-light)">📅 Miércoles:</strong>
+              <p
+                style="
+                  font-family: &quot;Fira Code&quot;, monospace;
+                  margin-top: 5px;
+                "
+              >
+                • 4:45 p.m. - 5:35 p.m.
+              </p>
+              <p style="font-family: &quot;Fira Code&quot;, monospace">
+                • 5:40 p.m. - 6:30 p.m.
+              </p>
+            </div>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 12px;
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+              "
+            >
+              <strong style="color: var(--cyan-light)">📅 Viernes:</strong>
+              <p
+                style="
+                  font-family: &quot;Fira Code&quot;, monospace;
+                  margin-top: 5px;
+                "
+              >
+                • 4:45 p.m. - 5:35 p.m.
+              </p>
+              <p style="font-family: &quot;Fira Code&quot;, monospace">
+                • 5:40 p.m. - 6:30 p.m.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Información del Curso</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 1: Bienvenida</span>
+        <span class="slide-number">Diapositiva 3 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-diagram-project"></i> Metodología de Trabajo
+      </h2>
+      <div class="content-area">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-laptop-code"></i> Clases Prácticas
+            </div>
+            <p>La teoría será aplicada inmediatamente mediante ejercicios.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-gears"></i> Mediante Ejemplos
+            </div>
+            <p>Cada concepto será explicado mediante programas funcionales.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-terminal"></i> Live Coding
+            </div>
+            <p>
+              El docente desarrollará código en tiempo real para analizar qué
+              hace, cómo funciona y cómo modificarlo.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-flask"></i> Laboratorios
+            </div>
+            <p>
+              Actividades prácticas donde desarrollaremos soluciones completas.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-puzzle-piece"></i> Retos de Programación
+            </div>
+            <p>
+              Ejercicios para fortalecer la lógica, análisis y resolución de
+              problemas.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-brands fa-github"></i> Uso de GitHub
+            </div>
+            <p>
+              Los proyectos serán almacenados y documentados utilizando
+              repositorios.
+            </p>
+          </div>
+        </div>
+        <div class="message-box">
+          <i class="fa-solid fa-rocket"></i>
+          <span
+            >"Desde la primera clase trabajaremos utilizando herramientas
+            utilizadas en ambientes profesionales."</span
+          >
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Metodología</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 2: Herramientas</span>
+        <span class="slide-number">Diapositiva 4 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-toolbox"></i> Nuestro Entorno de Trabajo
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-desktop" style="color: #a855f7"></i> Visual
+              Studio
+            </div>
+            <p>
+              Entorno de desarrollo donde escribiremos código, ejecutaremos
+              programas, detectaremos errores y depuraremos aplicaciones.
+            </p>
+          </div>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-cube" style="color: #5865f2"></i> .NET
+            </div>
+            <p>
+              Plataforma que permite crear proyectos, compilar programas y
+              ejecutar aplicaciones.
+            </p>
+          </div>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-code" style="color: var(--cyan-accent)"></i>
+              C#
+            </div>
+            <p>
+              Lenguaje utilizado para desarrollar nuestros programas de
+              software.
+            </p>
+          </div>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-brands fa-github" style="color: #fff"></i> GitHub
+            </div>
+            <p>
+              Plataforma para guardar proyectos, administrar versiones y
+              compartir código.
+            </p>
+          </div>
+        </div>
+        <div class="message-box">
+          <i class="fa-solid fa-check-double"></i>
+          <span
+            >"Estas serán nuestras herramientas de trabajo durante todo el
+            ciclo."</span
+          >
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Ecosistema Dev</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 3: Instalación</span>
+        <span class="slide-number">Diapositiva 5 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-download"></i> Instalación de Visual Studio
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <span style="color: var(--cyan-accent)">01.</span> Paso 1:
+              Descarga
+            </div>
+            <p>Ingresar al sitio oficial de Visual Studio y descargar:</p>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 12px;
+                border-radius: 8px;
+                border: 1px solid var(--cyan-accent);
+                font-weight: 600;
+                color: var(--cyan-light);
+                text-align: center;
+              "
+            >
+              Visual Studio Community
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <span style="color: var(--cyan-accent)">02.</span> Paso 2:
+              Instalador
+            </div>
+            <p>Ejecutar instalador y seleccionar la carga de trabajo:</p>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 12px;
+                border-radius: 8px;
+                border: 1px solid #10b981;
+                color: #10b981;
+                font-weight: 600;
+              "
+            >
+              ✅ Desarrollo de escritorio con .NET
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 10px">
+          <div class="card-title">
+            <i class="fa-solid fa-list-check"></i> Componentes Incluidos
+          </div>
+          <div class="grid-3" style="font-size: 13px">
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 8px 12px;
+                border-radius: 6px;
+              "
+            >
+              ✔ Visual Studio IDE
+            </div>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 8px 12px;
+                border-radius: 6px;
+              "
+            >
+              ✔ Compilador C#
+            </div>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 8px 12px;
+                border-radius: 6px;
+              "
+            >
+              ✔ .NET SDK
+            </div>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 8px 12px;
+                border-radius: 6px;
+              "
+            >
+              ✔ Herramientas depuración
+            </div>
+            <div
+              style="
+                background: var(--code-bg);
+                padding: 8px 12px;
+                border-radius: 6px;
+              "
+            >
+              ✔ Plantillas Console App
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Setup</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 3: Instalación</span>
+        <span class="slide-number">Diapositiva 6 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-sliders"></i> Configuración Inicial de Visual
+        Studio
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-user-check"></i> Al iniciar por primera vez
+            </div>
+            <ul>
+              <li>Inicia sesión con tu <strong>Cuenta Microsoft</strong>.</li>
+              <li>Selecciona tu <strong>Tema visual</strong>.</li>
+              <li>Aplica la <strong>Configuración recomendada</strong>.</li>
+            </ul>
+          </div>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-vial"></i> Verificación de Funcionamiento
+            </div>
+            <ul>
+              <li>Crear un proyecto tipo: <strong>Console App</strong>.</li>
+              <li>
+                Ejecutar usando el atajo:
+                <code
+                  style="
+                    color: var(--cyan-accent);
+                    font-family: &quot;Fira Code&quot;, monospace;
+                  "
+                  >Ctrl + F5</code
+                >
+              </li>
+              <li>
+                <strong>Resultado esperado:</strong> Ver el mensaje
+                <code style="color: #10b981">Hello, World!</code>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Setup</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 3: Instalación</span>
+        <span class="slide-number">Diapositiva 7 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-layer-group"></i> Instalación de .NET SDK
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent" style="padding: 25px">
+          <div class="card-title" style="font-size: 22px">
+            <i class="fa-solid fa-circle-question"></i> ¿Qué es .NET SDK?
+          </div>
+          <p style="font-size: 17px; margin-top: 10px">
+            Es el conjunto de herramientas necesarias para desarrollar y
+            ejecutar aplicaciones modernas con C#.
+          </p>
+        </div>
+        <div class="grid-3" style="margin-top: 15px">
+          <div class="card" style="text-align: center; align-items: center">
+            <i
+              class="fa-solid fa-folder-plus"
+              style="font-size: 32px; color: var(--cyan-accent)"
+            ></i>
+            <strong>Crear Proyectos</strong>
+          </div>
+          <div class="card" style="text-align: center; align-items: center">
+            <i
+              class="fa-solid fa-hammer"
+              style="font-size: 32px; color: var(--cyan-accent)"
+            ></i>
+            <strong>Compilar Código</strong>
+          </div>
+          <div class="card" style="text-align: center; align-items: center">
+            <i
+              class="fa-solid fa-play"
+              style="font-size: 32px; color: var(--cyan-accent)"
+            ></i>
+            <strong>Ejecutar Programas</strong>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Core .NET</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 3: Instalación</span>
+        <span class="slide-number">Diapositiva 8 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-terminal"></i> Verificar Instalación de .NET
+      </h2>
+      <div class="content-area">
+        <p>
+          Abre la consola (Terminal / CMD / PowerShell) y ejecuta los siguientes
+          comandos:
+        </p>
+        <div class="card" style="gap: 15px">
+          <div>
+            <p style="margin-bottom: 5px">1. Verificar la versión instalada:</p>
+            <pre>dotnet --version</pre>
+            <p style="font-size: 13px; color: #10b981; margin-top: 5px">
+              Resultado esperado: 8.x.x
+            </p>
+          </div>
+          <div>
+            <p style="margin-bottom: 5px">
+              2. Ver información detallada instalada:
+            </p>
+            <pre>dotnet --info</pre>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Terminal Verification</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 4: Introducción C# y .NET</span>
+        <span class="slide-number">Diapositiva 9 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-cubes"></i> ¿Qué es .NET?
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <p style="font-size: 16px">
+            <strong>.NET</strong> es una plataforma de desarrollo creada por
+            Microsoft que permite crear y ejecutar programas utilizando
+            diferentes lenguajes.
+          </p>
+        </div>
+        <div class="card" style="margin-top: 10px">
+          <div class="card-title">
+            <i class="fa-solid fa-terminal"></i> Aplicaciones de Consola
+          </div>
+          <p>Programas basados en texto con el siguiente flujo:</p>
+          <div class="flow-container" style="margin-top: 10px">
+            <div class="flow-step">
+              ENTRADA<br /><small>Usuario ingresa datos</small>
+            </div>
+            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-step">
+              PROCESO<br /><small>Programa procesa datos</small>
+            </div>
+            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+            <div class="flow-step">
+              SALIDA<br /><small>Muestra resultados</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Fundamentos</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 4: Introducción C# y .NET</span>
+        <span class="slide-number">Diapositiva 10 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-shield-halved"></i> ¿Por qué C#?
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="card">
+            <ul>
+              <li>✔ Lenguaje moderno.</li>
+              <li>✔ Fácil para iniciar en programación.</li>
+              <li>✔ Orientado a objetos.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <ul>
+              <li>✔ Utilizado profesionalmente en la industria.</li>
+              <li>✔ Base sólida para tecnologías como ASP.NET.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Lenguaje C#</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 11 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-folder-plus"></i> Crear Nuestro Primer Proyecto
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-list-ol"></i> Pasos en Visual Studio
+          </div>
+          <ul style="margin-top: 10px">
+            <li>1. Seleccionar: <strong>Create a new project</strong>.</li>
+            <li>2. Seleccionar tipo: <strong>Console App</strong>.</li>
+            <li>3. Lenguaje: <strong>C#</strong>.</li>
+            <li>
+              4. Nombre del proyecto:
+              <code
+                style="
+                  color: var(--cyan-accent);
+                  font-family: &quot;Fira Code&quot;, monospace;
+                "
+                >Laboratorio01</code
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Project Creation</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 12 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-window-maximize"></i> ¿Qué es una Aplicación de
+        Consola?
+      </h2>
+      <div class="content-area">
+        <p>
+          Una aplicación de consola es un programa que funciona exclusivamente
+          mediante texto.
+        </p>
+        <div class="grid-3" style="margin-top: 15px">
+          <div class="card card-accent">
+            <strong style="color: var(--cyan-accent)">ENTRADA</strong>
+            <p>Usuario escribe información.</p>
+          </div>
+          <div class="card card-accent">
+            <strong style="color: var(--cyan-accent)">PROCESO</strong>
+            <p>Programa ejecuta instrucciones.</p>
+          </div>
+          <div class="card card-accent">
+            <strong style="color: var(--cyan-accent)">SALIDA</strong>
+            <p>Resultado mostrado en pantalla.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Console Apps</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 13 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-sitemap"></i> Estructura de un Proyecto Console
+      </h2>
+      <div class="content-area">
+        <p>Estructura básica de archivos generada:</p>
+        <pre>
+Laboratorio01
+│
+├── 📄 Program.cs
+├── 📄 Laboratorio01.csproj
+├── 📁 bin
+└── 📁 obj
+        </pre>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Project Architecture</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 14 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-file-code"></i> 📄 Program.cs
+      </h2>
+      <div class="content-area">
+        <p>
+          Archivo principal del programa donde escribimos nuestro código fuente.
+        </p>
+        <pre>Console.<span class="code-func">WriteLine</span>(<span class="code-string">"Hola mundo"</span>);</pre>
+        <div class="grid-2">
+          <div class="card">
+            <p><strong>Contiene:</strong></p>
+            <ul>
+              <li>Lógica principal.</li>
+              <li>Método <code class="code-type">Main()</code>.</li>
+              <li>Clases y métodos.</li>
+            </ul>
+          </div>
+          <div class="card card-accent">
+            <p><strong>Flujo de ejecución:</strong></p>
+            <div
+              class="flow-container"
+              style="flex-direction: column; gap: 6px; padding: 10px"
+            >
+              <div class="flow-step" style="width: 100%">Usuario ejecuta</div>
+              <i class="fa-solid fa-arrow-down flow-arrow"></i>
+              <div class="flow-step" style="width: 100%">Program.cs</div>
+              <i class="fa-solid fa-arrow-down flow-arrow"></i>
+              <div class="flow-step" style="width: 100%">Código C#</div>
+              <i class="fa-solid fa-arrow-down flow-arrow"></i>
+              <div class="flow-step" style="width: 100%">Resultado consola</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Program.cs</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 15 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-gear"></i> 📄 Proyecto.csproj
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">Archivo de Configuración</div>
+          <p>
+            Indica el nombre del proyecto, la versión de .NET, el tipo de
+            aplicación y las dependencias.
+          </p>
+        </div>
+        <p style="margin-top: 15px">Ejemplo de configuración interna:</p>
+        <pre><span class="code-keyword">&lt;TargetFramework&gt;</span>net8.0<span class="code-keyword">&lt;/TargetFramework&gt;</span></pre>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Configuración</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 16 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-folder"></i> 📁 bin (Binary)
+      </h2>
+      <div class="content-area">
+        <div class="card">
+          <p>Guarda los resultados compilados del proyecto.</p>
+          <ul>
+            <li>Ejecutables (.exe).</li>
+            <li>Librerías (.dll).</li>
+            <li>Archivos necesarios para ejecución.</li>
+          </ul>
+        </div>
+        <div class="message-box" style="margin-top: 15px">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span
+            ><strong>Nota:</strong> Esta carpeta no se modifica
+            manualmente.</span
+          >
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Compilación</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 17 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-folder-open"></i> 📁 obj (Object)
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <p>
+            Archivos internos utilizados de forma intermedia durante el proceso
+            de compilación.
+          </p>
+          <ul>
+            <li>Archivos temporales.</li>
+            <li>Información de construcción del proyecto.</li>
+            <li>Configuración interna del compilador.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Archivos Temporales</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 5: Primer Proyecto</span>
+        <span class="slide-number">Diapositiva 18 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-route"></i> Flujo Completo de Ejecución
+      </h2>
+      <div class="content-area">
+        <div class="flow-container" style="justify-content: space-around">
+          <div class="flow-step">Program.cs</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">Código fuente</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">Compilación .NET</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">obj + bin</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">Programa ejecutable</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Flujo General</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 6: Programación en Vivo</span>
+        <span class="slide-number">Diapositiva 19 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-code"></i> Primer Programa & Ejemplo 1
+      </h2>
+      <div class="content-area">
+        <pre>Console.<span class="code-func">WriteLine</span>(<span class="code-string">"Hola Mundo"</span>);</pre>
+        <div class="grid-3" style="font-size: 13px">
+          <div class="card">
+            <strong style="color: var(--cyan-light)">Console</strong> Trabaja
+            con la consola.
+          </div>
+          <div class="card">
+            <strong style="color: var(--cyan-light)">WriteLine</strong> Muestra
+            información en pantalla.
+          </div>
+          <div class="card">
+            <strong style="color: var(--cyan-light)">Texto</strong> Debe ir
+            entre comillas dobles.
+          </div>
+        </div>
+        <div class="card card-accent" style="margin-top: 10px">
+          <strong>Ejemplo 1: Mostrar Información</strong>
+          <pre>Console.<span class="code-func">WriteLine</span>(<span class="code-string">"Bienvenidos al curso"</span>);
+Console.<span class="code-func">WriteLine</span>(<span class="code-string">"Programación Estructurada"</span>);
+Console.<span class="code-func">WriteLine</span>(<span class="code-string">"C# .NET"</span>);</pre>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Live Coding</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 6: Programación en Vivo</span>
+        <span class="slide-number">Diapositiva 20 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-box-archive"></i> Variables & Ejemplo 2
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <p>
+            <strong>¿Cómo recuerda información un programa?</strong> Una
+            variable almacena datos temporalmente en memoria.
+          </p>
+        </div>
+        <div class="grid-2" style="margin-top: 10px">
+          <div>
+            <p><strong>Declaración:</strong></p>
+            <pre><span class="code-type">string</span> nombre = <span class="code-string">"Luis"</span>;
+<span class="code-type">int</span> edad = <span class="code-number">20</span>;</pre>
+          </div>
+          <div>
+            <p><strong>Ejemplo 2: Impresión</strong></p>
+            <pre><span class="code-type">string</span> nombre = <span class="code-string">"Luis"</span>;
+<span class="code-type">int</span> edad = <span class="code-number">20</span>;
+Console.<span class="code-func">WriteLine</span>(nombre);
+Console.<span class="code-func">WriteLine</span>(edad);</pre>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Variables</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 6: Programación en Vivo</span>
+        <span class="slide-number">Diapositiva 21 / 32</span>
+      </div>
+      <h2 class="slide-title"><i class="fa-solid fa-lock"></i> Constantes</h2>
+      <div class="content-area">
+        <p>
+          Valores fijos que <strong>no cambian</strong> durante la ejecución del
+          programa.
+        </p>
+        <pre><span class="code-keyword">const</span> <span class="code-type">double</span> PI = <span class="code-number">3.1416</span>;</pre>
+        <div class="card card-accent" style="margin-top: 15px">
+          <div class="card-title">
+            <i class="fa-solid fa-lightbulb"></i> Usos Principales
+          </div>
+          <ul>
+            <li>Fórmulas matemáticas.</li>
+            <li>Parámetros de configuración.</li>
+            <li>Valores fijos del sistema.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Constantes</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 6: Programación en Vivo</span>
+        <span class="slide-number">Diapositiva 22 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-table-list"></i> Tipos de Datos & Ejemplo 3
+      </h2>
+      <div class="content-area">
+        <table class="tech-table">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Descripción / Ejemplos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="code-type">string</code></td>
+              <td>Texto ("Carlos")</td>
+            </tr>
+            <tr>
+              <td><code class="code-type">int</code></td>
+              <td>Enteros (25)</td>
+            </tr>
+            <tr>
+              <td><code class="code-type">double</code></td>
+              <td>Decimales (8.5)</td>
+            </tr>
+            <tr>
+              <td><code class="code-type">char</code></td>
+              <td>Carácter único ('A')</td>
+            </tr>
+            <tr>
+              <td><code class="code-type">bool</code></td>
+              <td>Booleano (true / false)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 10px">
+          <p><strong>Ejemplo 3:</strong></p>
+          <pre><span class="code-type">string</span> nombre = <span class="code-string">"Ana"</span>;
+<span class="code-type">int</span> edad = <span class="code-number">22</span>;
+<span class="code-type">double</span> promedio = <span class="code-number">8.75</span>;
+<span class="code-type">char</span> grupo = <span class="code-string">'A'</span>;
+<span class="code-type">bool</span> aprobado = <span class="code-keyword">true</span>;</pre>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Tipos de Datos</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 6: Programación en Vivo</span>
+        <span class="slide-number">Diapositiva 23 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-keyboard"></i> Entrada de Información & Ejemplo 4
+      </h2>
+      <div class="content-area">
+        <p>
+          <strong>¿Cómo hacemos que el usuario escriba datos?</strong>
+          Utilizando la instrucción:
+        </p>
+        <pre>Console.<span class="code-func">ReadLine</span>();</pre>
+        <div class="card card-accent" style="margin-top: 10px">
+          <strong>Ejemplo 4: Captura y Conversión</strong>
+          <pre>Console.<span class="code-func">Write</span>(<span class="code-string">"Nombre:"</span>);
+<span class="code-type">string</span> nombre = Console.<span class="code-func">ReadLine</span>();
+
+Console.<span class="code-func">Write</span>(<span class="code-string">"Edad:"</span>);
+<span class="code-type">int</span> edad = Convert.<span class="code-func">ToInt32</span>(Console.<span class="code-func">ReadLine</span>());
+
+Console.<span class="code-func">WriteLine</span>(nombre);
+Console.<span class="code-func">WriteLine</span>(edad);</pre>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Console ReadLine</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 7: Laboratorio 1</span>
+        <span class="slide-number">Diapositiva 24 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-flask"></i> Captura de Datos mediante Consola
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-bullseye"></i> Objetivo Práctico
+          </div>
+          <p>
+            Crear un programa que capture la información general de un
+            estudiante e imprima un resumen estructurado en pantalla.
+          </p>
+        </div>
+        <div class="card" style="margin-top: 10px">
+          <div class="card-title">
+            <i class="fa-solid fa-list-check"></i> Datos a Capturar
+          </div>
+          <div class="grid-3">
+            <ul>
+              <li>• Nombre</li>
+              <li>• Apellido</li>
+            </ul>
+            <ul>
+              <li>• Edad</li>
+              <li>• Carrera</li>
+            </ul>
+            <ul>
+              <li>• Universidad</li>
+              <li>• Promedio</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Laboratorio 01</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 25 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-circle-question"></i> ¿Por qué necesitamos Git?
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="card" style="border-color: #f43f5e">
+            <div class="card-title" style="color: #f43f5e">
+              <i class="fa-solid fa-triangle-exclamation"></i> El Problema
+              Habitual
+            </div>
+            <pre>
+Programa.cs
+Programa_final.cs
+Programa_final2.cs
+Programa_final_ok.cs</pre
+            >
+          </div>
+          <div
+            class="card card-accent"
+            style="justify-content: center; text-align: center"
+          >
+            <p style="font-size: 20px; color: var(--cyan-light)">
+              <strong>¿Cuál es la versión correcta?</strong>
+            </p>
+            <p style="margin-top: 10px">
+              Git resuelve el caos administrando historiales de forma limpia y
+              profesional.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Control de Versiones</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 26 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-code-branch fa-solid"></i> ¿Qué es Git?
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <p style="font-size: 16px">
+            <strong>Git</strong> es un sistema de control de versiones
+            distribuido.
+          </p>
+        </div>
+        <div class="grid-2" style="margin-top: 15px">
+          <div class="card">✔ Guardar cambios progresivos.</div>
+          <div class="card">✔ Crear versiones del proyecto.</div>
+          <div class="card">✔ Recuperar código anterior.</div>
+          <div class="card">✔ Trabajar profesionalmente.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Git Core</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 27 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-brands fa-github"></i> ¿Qué es GitHub?
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <p style="font-size: 16px">
+            <strong>GitHub</strong> es una plataforma en la nube donde
+            almacenamos repositorios Git.
+          </p>
+        </div>
+        <div class="grid-3" style="margin-top: 15px">
+          <div class="card">✔ Respaldar proyectos.</div>
+          <div class="card">✔ Compartir código.</div>
+          <div class="card">✔ Trabajar en equipo.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>GitHub Platform</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 28 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-scale-balanced"></i> Git vs GitHub & Instalación
+      </h2>
+      <div class="content-area">
+        <table class="tech-table">
+          <thead>
+            <tr>
+              <th>Git</th>
+              <th>GitHub</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Programa local</td>
+              <td>Plataforma web</td>
+            </tr>
+            <tr>
+              <td>Controla versiones</td>
+              <td>Guarda repositorios</td>
+            </tr>
+            <tr>
+              <td>Historial de cambios</td>
+              <td>Colaboración en la nube</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card" style="margin-top: 15px">
+          <p><strong>Verificar Instalación de Git:</strong></p>
+          <pre>git --version</pre>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Comparativa Git</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 29 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-sliders"></i> Configuración Inicial de Git
+      </h2>
+      <div class="content-area">
+        <p>Ejecutar en la terminal para configurar tu identidad:</p>
+        <pre><span class="code-comment"># Configurar nombre de usuario</span>
+git config --global user.name <span class="code-string">"Tu Nombre"</span>
+
+<span class="code-comment"># Configurar correo electrónico</span>
+git config --global user.email <span class="code-string">"tu_correo@ejemplo.com"</span></pre>
+        <div class="card card-accent" style="margin-top: 10px">
+          <p>Ver la configuración activa:</p>
+          <pre>git config --list</pre>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Git Setup</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 30 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-terminal"></i> Comandos Esenciales de Git
+      </h2>
+      <div class="content-area">
+        <div class="grid-2">
+          <div>
+            <p>Crear repositorio:</p>
+            <pre>git init</pre>
+            <p>Revisar cambios:</p>
+            <pre>git status</pre>
+            <p>Preparar cambios:</p>
+            <pre>git add .</pre>
+          </div>
+          <div>
+            <p>Guardar versión:</p>
+            <pre>git commit -m <span class="code-string">"mensaje"</span></pre>
+            <p>Subir a GitHub:</p>
+            <pre>git push</pre>
+            <p>Descargar cambios:</p>
+            <pre>git pull</pre>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Git CLI</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Git y GitHub</span>
+        <span class="slide-number">Diapositiva 31 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-diagram-next"></i> Flujo Profesional de Trabajo
+      </h2>
+      <div class="content-area">
+        <div class="flow-container" style="justify-content: space-around">
+          <div class="flow-step">Crear código</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">git status</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">git add .</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">git commit</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">git push</div>
+          <i class="fa-solid fa-arrow-right flow-arrow"></i>
+          <div class="flow-step">GitHub</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Workflow</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE 8: Cierre</span>
+        <span class="slide-number">Diapositiva 32 / 32</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-flag-checkered"></i> Cierre de Sesión
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title" style="color: #10b981">
+            <i class="fa-solid fa-circle-check"></i> Hoy Logramos:
+          </div>
+          <div class="grid-2" style="margin-top: 10px">
+            <ul>
+              <li>✔ Conocer la asignatura.</li>
+              <li>✔ Instalar herramientas.</li>
+              <li>✔ Crear nuestro primer proyecto C#.</li>
+              <li>✔ Comprender estructura .NET.</li>
+            </ul>
+            <ul>
+              <li>✔ Crear programas de consola.</li>
+              <li>✔ Capturar información.</li>
+              <li>✔ Crear laboratorio.</li>
+              <li>✔ Configurar Git y GitHub.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES</span>
+        <span>Resumen Sesión 01</span>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="nav-btn" id="prevBtn">
+        <i class="fa-solid fa-chevron-left"></i> Anterior
+      </button>
+      <span class="nav-counter" id="navCounter">1 / 32</span>
+      <button class="nav-btn" id="nextBtn">
+        Siguiente <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <button
+        class="nav-btn"
+        id="pdfBtn"
+        style="border-color: var(--gold-unicaes); color: var(--gold-unicaes)"
+      >
+        <i class="fa-solid fa-file-pdf"></i> Exportar PDF
+      </button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const slides = document.querySelectorAll(".slide");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const pdfBtn = document.getElementById("pdfBtn");
+        const navCounter = document.getElementById("navCounter");
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+          slides.forEach((slide, i) => {
+            slide.classList.toggle("active", i === index);
+          });
+
+          navCounter.textContent = `${index + 1} / ${totalSlides}`;
+          prevBtn.disabled = index === 0;
+          nextBtn.disabled = index === totalSlides - 1;
+        }
+
+        function nextSlide() {
+          if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+          }
+        }
+
+        function prevSlide() {
+          if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+          }
+        }
+
+        // FUNCIÓN DE EXPORTACIÓN A PDF (renderiza cada diapositiva por separado
+        // y arma un PDF de varias páginas; esto evita los problemas de fondo
+        // negro / cortes que provoca capturar todas las slides en un único
+        // lienzo gigante con saltos de página CSS).
+        async function exportToPDF() {
+          pdfBtn.disabled = true;
+          pdfBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF...`;
+
+          // Guardamos cuál diapositiva estaba activa para restaurarla al final
+          const originalIndex = currentSlide;
+
+          const opt = {
+            margin: 0,
+            image: { type: "jpeg", quality: 0.95 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              logging: false,
+              backgroundColor: "#0f172a",
+              windowWidth: 1280,
+              windowHeight: 720,
+            },
+            jsPDF: {
+              unit: "px",
+              format: [1280, 720],
+              orientation: "landscape",
+              compress: true,
+            },
+          };
+
+          let pdfInstance = null;
+
+          try {
+            if (typeof html2pdf !== "function") {
+              throw new Error("La librería html2pdf no está disponible.");
+            }
+
+            for (let i = 0; i < slides.length; i++) {
+              const slide = slides[i];
+
+              // Mostramos temporalmente la diapositiva actual para poder
+              // capturarla (aunque no sea la "active" en este momento)
+              const previousDisplay = slide.style.display;
+              slide.classList.add("active");
+              slide.style.display = "flex";
+
+              // Pequeña espera para que el navegador termine de pintar
+              // fuentes/iconos antes de capturar.
+              await new Promise((resolve) => requestAnimationFrame(resolve));
+              await new Promise((resolve) => setTimeout(resolve, 60));
+
+              // Usamos la API interna de html2pdf.js (que ya trae html2canvas
+              // y jsPDF embebidos) en lugar de depender de variables globales
+              // sueltas, que no siempre se exponen en la versión "bundle".
+              const worker = html2pdf().set(opt).from(slide);
+              await worker.toCanvas();
+              const canvas = worker.prop.canvas;
+
+              if (!canvas) {
+                throw new Error(
+                  "No se pudo generar el lienzo de la diapositiva " + (i + 1),
+                );
+              }
+
+              if (i === 0) {
+                await worker.toPdf();
+                pdfInstance = worker.prop.pdf;
+              } else {
+                const imgData = canvas.toDataURL("image/jpeg", 0.95);
+                pdfInstance.addPage([1280, 720], "landscape");
+                pdfInstance.addImage(imgData, "JPEG", 0, 0, 1280, 720);
+              }
+
+              // Restauramos el estado que tenía la diapositiva
+              slide.style.display = previousDisplay;
+              if (i !== originalIndex) {
+                slide.classList.remove("active");
+              }
+            }
+
+            if (!pdfInstance) {
+              throw new Error("No se generó ningún contenido para el PDF.");
+            }
+
+            pdfInstance.save("Sesion_01_Programacion_Estructurada_UNICAES.pdf");
+          } catch (error) {
+            console.error("Error al generar el PDF:", error);
+            alert(
+              "Hubo un error al generar el PDF. Revisa la consola (F12) para más detalles:\n" +
+                error.message,
+            );
+          } finally {
+            // Restauramos la vista original de las diapositivas
+            showSlide(originalIndex);
+            pdfBtn.disabled = false;
+            pdfBtn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Exportar PDF`;
+          }
+        }
+
+        // Eventos
+        nextBtn.addEventListener("click", nextSlide);
+        prevBtn.addEventListener("click", prevSlide);
+        pdfBtn.addEventListener("click", exportToPDF);
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight" || e.key === " ") {
+            e.preventDefault();
+            nextSlide();
+          } else if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            prevSlide();
+          }
+        });
+
+        showSlide(currentSlide);
+      });
+    </script>
+  </body>
+</html>

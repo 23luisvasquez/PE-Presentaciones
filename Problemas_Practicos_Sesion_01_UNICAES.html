@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Problemas Prácticos - Sesión 01 | UNICAES</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+      /* ==========================================================================
+   SISTEMA DE DISEÑO: DARK MODE TECH (AZUL CIAN) - UNICAES
+   ========================================================================== */
+      :root {
+        --bg-dark: #0f172a; /* Slate 900 */
+        --bg-card: #1e293b; /* Slate 800 */
+        --bg-card-hover: #334155; /* Slate 700 */
+        --cyan-accent: #06b6d4; /* Cyan 500 */
+        --cyan-glow: rgba(6, 182, 212, 0.25);
+        --cyan-light: #67e8f9; /* Cyan 300 */
+        --burgundy-unicaes: #800000;
+        --gold-unicaes: #daa520;
+
+        --text-main: #f8fafc; /* Slate 50 */
+        --text-muted: #94a3b8; /* Slate 400 */
+
+        --code-bg: #090d16;
+        --border-color: #334155;
+
+        --slide-w: 1280px;
+        --slide-h: 720px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #020617;
+        font-family: "Inter", sans-serif;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px 0 80px 0;
+      }
+
+      /* CONTENEDOR DE SLIDE CON MÁXIMA ESTABILIDAD VISUAL */
+      .slide {
+        width: var(--slide-w);
+        height: var(--slide-h);
+        background-color: var(--bg-dark);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        padding: 40px 60px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      }
+
+      .slide.active {
+        display: flex;
+      }
+
+      /* Barra superior de acento */
+      .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--cyan-accent) 0%,
+          var(--gold-unicaes) 50%,
+          var(--burgundy-unicaes) 100%
+        );
+      }
+
+      /* HEADER DEL SLIDE */
+      .slide-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+        height: 50px;
+      }
+
+      .block-tag {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: var(--cyan-accent);
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid var(--cyan-accent);
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .slide-number {
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .slide-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .slide-title i {
+        color: var(--cyan-accent);
+      }
+
+      /* ÁREA DE CONTENIDO */
+      .content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 0;
+        gap: 16px;
+      }
+
+      /* GRID LAYOUTS */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      /* TARJETAS Y CONTENEDORES */
+      .card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-accent {
+        border-left: 4px solid var(--cyan-accent);
+      }
+
+      .card-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 16px;
+        color: var(--cyan-light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .message-box {
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.1) 0%,
+          rgba(30, 41, 59, 0.8) 100%
+        );
+        border: 1px solid var(--cyan-accent);
+        border-radius: 10px;
+        padding: 14px;
+        font-style: italic;
+        color: var(--cyan-light);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+      }
+
+      /* TIPOGRAFÍA Y TEXTOS */
+      p,
+      li {
+        font-size: 14.5px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      strong {
+        color: var(--text-main);
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      ul li {
+        position: relative;
+        padding-left: 20px;
+      }
+
+      ul li::before {
+        content: "➢";
+        position: absolute;
+        left: 0;
+        color: var(--cyan-accent);
+      }
+
+      /* BLOQUES DE CÓDIGO CON RESALTADO CIAN */
+      pre {
+        background-color: var(--code-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-family: "Fira Code", monospace;
+        font-size: 13.5px;
+        color: #e2e8f0;
+        overflow-x: auto;
+      }
+
+      .code-type {
+        color: var(--cyan-accent);
+        font-weight: 600;
+      }
+      .code-string {
+        color: #10b981;
+      }
+      .code-func {
+        color: #60a5fa;
+      }
+      .code-comment {
+        color: #64748b;
+        font-style: italic;
+      }
+
+      /* FOOTER DE SLIDE */
+      .slide-footer {
+        height: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: "Fira Code", monospace;
+      }
+
+      .unicaes-badge {
+        color: var(--gold-unicaes);
+        font-weight: 600;
+      }
+
+      /* BARRA DE NAVEGACIÓN FLOTANTE */
+      .nav-bar {
+        position: fixed;
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background-color: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+
+      .nav-btn {
+        background-color: var(--bg-dark);
+        color: var(--cyan-light);
+        border: 1px solid var(--cyan-accent);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .nav-btn:hover:not(:disabled) {
+        background-color: var(--cyan-accent);
+        color: var(--bg-dark);
+        box-shadow: 0 0 10px var(--cyan-glow);
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        border-color: var(--border-color);
+        color: var(--text-muted);
+      }
+
+      .nav-counter {
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        color: var(--text-main);
+        min-width: 90px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide active">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE PRÁCTICO: PROBLEMA 01</span>
+        <span class="slide-number">Diapositiva 33 / 37</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-address-card"></i> Problema 1: Ficha Digital de
+        Empleado
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-bullseye"></i> Enunciado del Problema
+          </div>
+          <p>
+            Escribe un programa en C# que solicite al usuario los datos básicos
+            de un empleado:
+            <strong
+              >nombre completo, edad, cargo, salario bruto y si cuenta con
+              seguro médico (true/false)</strong
+            >. Al finalizar la captura, debe mostrar una ficha formateada con
+            los datos ingresados.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-code"></i> Conceptos a Utilizar
+            </div>
+            <ul>
+              <li>
+                Variables: <code class="code-type">string</code>,
+                <code class="code-type">int</code>,
+                <code class="code-type">double</code>,
+                <code class="code-type">bool</code>
+              </li>
+              <li>
+                Entrada de texto:
+                <code class="code-func">Console.ReadLine()</code>
+              </li>
+              <li>
+                Conversión de tipos:
+                <code class="code-func">Convert.ToDouble()</code>,
+                <code class="code-func">Convert.ToBoolean()</code>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-desktop"></i> Ejemplo de Salida Esperada
+            </div>
+            <pre>
+--- FICHA DE EMPLEADO ---
+Empleado: Roberto Gómez
+Cargo: Analista de Sistemas
+Edad: 28 años
+Salario: $850.50
+Seguro Activo: True</pre
+            >
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES - Programación Estructurada</span>
+        <span>Ejercicios Prácticos</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE PRÁCTICO: PROBLEMA 02</span>
+        <span class="slide-number">Diapositiva 34 / 37</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-calculator"></i> Problema 2: Calculadora de
+        Promedio de 3 Notas
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-bullseye"></i> Enunciado del Problema
+          </div>
+          <p>
+            Crea un programa que pida el nombre de una asignatura y las notas de
+            <strong>3 Evaluaciones Continuas (Laboratorios)</strong>. El
+            programa debe calcular el promedio final sumando las tres notas y
+            dividiéndolas entre 3, imprimiendo el resultado exacto con sus
+            decimales.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-code"></i> Conceptos a Utilizar
+            </div>
+            <ul>
+              <li>
+                Tipo de dato decimal: <code class="code-type">double</code>
+              </li>
+              <li>
+                Operaciones aritméticas simples (<code class="code-type">+</code
+                >, <code class="code-type">/</code>)
+              </li>
+              <li>Uso de paréntesis para prioridad de operaciones.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-desktop"></i> Ejemplo de Salida Esperada
+            </div>
+            <pre>
+Materia: Programación Estructurada
+Ingrese Nota 1: 8.5
+Ingrese Nota 2: 9.0
+Ingrese Nota 3: 7.5
+
+Promedio Final: 8.33</pre
+            >
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES - Programación Estructurada</span>
+        <span>Ejercicios Prácticos</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE PRÁCTICO: PROBLEMA 03</span>
+        <span class="slide-number">Diapositiva 35 / 37</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-store"></i> Problema 3: Ticket de Compra Rápida
+        (con IVA)
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-bullseye"></i> Enunciado del Problema
+          </div>
+          <p>
+            Desarrolla una aplicación de consola que simule el cobro en una
+            tienda. Debe solicitar el
+            <strong
+              >nombre del producto, el precio unitario y la cantidad
+              comprada</strong
+            >. Con una <strong>constante de IVA del 13% (0.13)</strong>, calcula
+            el Subtotal, el valor del Impuesto y el Total Final a pagar.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-code"></i> Conceptos a Utilizar
+            </div>
+            <ul>
+              <li>
+                Declaración de constante:
+                <code class="code-keyword">const double IVA = 0.13;</code>
+              </li>
+              <li>Multiplicación de variables numéricas.</li>
+              <li>Formateo claro de datos de salida numéricos.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-desktop"></i> Ejemplo de Salida Esperada
+            </div>
+            <pre>
+Producto: Teclado Mecánico
+Cantidad: 2 | Precio c/u: $45.00
+--------------------------------
+Subtotal: $90.00
+IVA (13%): $11.70
+Total A Pagar: $101.70</pre
+            >
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES - Programación Estructurada</span>
+        <span>Ejercicios Prácticos</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE PRÁCTICO: PROBLEMA 04</span>
+        <span class="slide-number">Diapositiva 36 / 37</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-solid fa-ruler-combined"></i> Problema 4: Conversor de
+        Unidades de Longitud
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-bullseye"></i> Enunciado del Problema
+          </div>
+          <p>
+            El usuario ingresará una distancia dada en <strong>Metros</strong>.
+            El programa utilizará constantes para convertir y mostrar esa misma
+            distancia en: <strong>Centímetros, Milímetros y Pulgadas</strong> (1
+            metro = 39.3701 pulgadas).
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-code"></i> Conceptos a Utilizar
+            </div>
+            <ul>
+              <li>Uso de constantes numéricas de conversión.</li>
+              <li>
+                Reutilización de una misma variable de entrada para múltiples
+                cálculos.
+              </li>
+              <li>Estructuración organizada de texto de salida.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-desktop"></i> Ejemplo de Salida Esperada
+            </div>
+            <pre>
+Ingrese la distancia en metros: 2.5
+
+--- CONVERSIONES ---
+Centímetros: 250 cm
+Milímetros:  2500 mm
+Pulgadas:    98.4251 in</pre
+            >
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES - Programación Estructurada</span>
+        <span>Ejercicios Prácticos</span>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-header">
+        <span class="block-tag">BLOQUE PRÁCTICO: PROBLEMA 05</span>
+        <span class="slide-number">Diapositiva 37 / 37</span>
+      </div>
+      <h2 class="slide-title">
+        <i class="fa-brands fa-github"></i> Problema 5: Control de Versiones con
+        Git
+      </h2>
+      <div class="content-area">
+        <div class="card card-accent">
+          <div class="card-title">
+            <i class="fa-solid fa-bullseye"></i> Enunciado del Problema
+          </div>
+          <p>
+            Crea un repositorio local llamado
+            <code style="color: var(--cyan-light)">SolucionEjercicios01</code>.
+            Agrega el proyecto en C# desarrollado en los ejercicios anteriores y
+            realiza el flujo de Git necesario para publicar el proyecto en tu
+            cuenta de GitHub.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <i class="fa-solid fa-list-check"></i> Secuencia de Pasos Requerida
+            en la Terminal
+          </div>
+          <pre><span class="code-comment"># 1. Inicializar repositorio</span>
+git init
+
+<span class="code-comment"># 2. Agregar todos los archivos creados</span>
+git add .
+
+<span class="code-comment"># 3. Crear el primer commit oficial</span>
+git commit -m "feat: Agregar ejercicios practicos de la Sesion 01"
+
+<span class="code-comment"># 4. Vincular y subir al repositorio remoto de GitHub</span>
+git remote add origin https://github.com/tu_usuario/SolucionEjercicios01.git
+git push -u origin main</pre>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="unicaes-badge">UNICAES - Programación Estructurada</span>
+        <span>Ejercicios Prácticos</span>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="nav-btn" id="prevBtn">
+        <i class="fa-solid fa-chevron-left"></i> Anterior
+      </button>
+      <span class="nav-counter" id="navCounter">33 / 37</span>
+      <button class="nav-btn" id="nextBtn">
+        Siguiente <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <button
+        class="nav-btn"
+        id="pdfBtn"
+        style="border-color: var(--gold-unicaes); color: var(--gold-unicaes)"
+      >
+        <i class="fa-solid fa-file-pdf"></i> Exportar PDF
+      </button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const slides = document.querySelectorAll(".slide");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const pdfBtn = document.getElementById("pdfBtn");
+        const navCounter = document.getElementById("navCounter");
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+          slides.forEach((slide, i) => {
+            if (i === index) {
+              slide.classList.add("active");
+            } else {
+              slide.classList.remove("active");
+            }
+          });
+
+          navCounter.textContent = `${index + 33} / 37`;
+
+          prevBtn.disabled = index === 0;
+          nextBtn.disabled = index === totalSlides - 1;
+        }
+
+        function nextSlide() {
+          if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+          }
+        }
+
+        function prevSlide() {
+          if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+          }
+        }
+
+        // FUNCIÓN DE EXPORTACIÓN A PDF: renderiza cada diapositiva por separado
+        // usando la API interna de html2pdf.js (que ya trae html2canvas y
+        // jsPDF embebidos) y arma un PDF de varias páginas.
+        async function exportToPDF() {
+          pdfBtn.disabled = true;
+          pdfBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF...`;
+
+          const originalIndex = currentSlide;
+
+          const opt = {
+            margin: 0,
+            image: { type: "jpeg", quality: 0.95 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              logging: false,
+              backgroundColor: "#0f172a",
+              windowWidth: 1280,
+              windowHeight: 720,
+            },
+            jsPDF: {
+              unit: "px",
+              format: [1280, 720],
+              orientation: "landscape",
+              compress: true,
+            },
+          };
+
+          let pdfInstance = null;
+
+          try {
+            if (typeof html2pdf !== "function") {
+              throw new Error("La librería html2pdf no está disponible.");
+            }
+
+            for (let i = 0; i < slides.length; i++) {
+              const slide = slides[i];
+
+              const previousDisplay = slide.style.display;
+              slide.classList.add("active");
+              slide.style.display = "flex";
+
+              await new Promise((resolve) => requestAnimationFrame(resolve));
+              await new Promise((resolve) => setTimeout(resolve, 60));
+
+              const worker = html2pdf().set(opt).from(slide);
+              await worker.toCanvas();
+              const canvas = worker.prop.canvas;
+
+              if (!canvas) {
+                throw new Error(
+                  "No se pudo generar el lienzo de la diapositiva " + (i + 1)
+                );
+              }
+
+              if (i === 0) {
+                await worker.toPdf();
+                pdfInstance = worker.prop.pdf;
+              } else {
+                const imgData = canvas.toDataURL("image/jpeg", 0.95);
+                pdfInstance.addPage([1280, 720], "landscape");
+                pdfInstance.addImage(imgData, "JPEG", 0, 0, 1280, 720);
+              }
+
+              slide.style.display = previousDisplay;
+              if (i !== originalIndex) {
+                slide.classList.remove("active");
+              }
+            }
+
+            if (!pdfInstance) {
+              throw new Error("No se generó ningún contenido para el PDF.");
+            }
+
+            pdfInstance.save("Problemas_Practicos_Sesion_01_UNICAES.pdf");
+          } catch (error) {
+            console.error("Error al generar el PDF:", error);
+            alert(
+              "Hubo un error al generar el PDF. Revisa la consola (F12) para más detalles:\n" +
+                error.message
+            );
+          } finally {
+            showSlide(originalIndex);
+            pdfBtn.disabled = false;
+            pdfBtn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Exportar PDF`;
+          }
+        }
+
+        nextBtn.addEventListener("click", nextSlide);
+        prevBtn.addEventListener("click", prevSlide);
+        pdfBtn.addEventListener("click", exportToPDF);
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight" || e.key === " ") {
+            e.preventDefault();
+            nextSlide();
+          } else if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            prevSlide();
+          }
+        });
+
+        showSlide(currentSlide);
+      });
+    </script>
+  </body>
+</html>
