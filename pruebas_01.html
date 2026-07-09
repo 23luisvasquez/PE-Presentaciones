@@ -16,6 +16,43 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+      /* ESTILOS DEL BOTÓN VOLVER */
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        background-color: var(--bg-card, #0f172a);
+        color: var(--text-muted, #94a3b8);
+        border: 1px solid var(--border-color, #334155);
+        border-radius: 10px;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 24px;
+        width: fit-content;
+      }
+
+      .btn-back i {
+        font-size: 14px;
+        transition: transform 0.25s ease;
+      }
+
+      /* EFECTOS HOVER */
+      .btn-back:hover {
+        color: var(--cyan-light, #67e8f9);
+        border-color: var(--cyan-accent, #06b6d4);
+        background-color: var(--bg-card-hover, #1e293b);
+        box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15);
+      }
+
+      /* Animación de la flecha retrocediendo al pasar el mouse */
+      .btn-back:hover i {
+        transform: translateX(-4px);
+      }
+
       /* ==========================================================================
    SISTEMA DE DISEÑO: DARK MODE TECH (AZUL CIAN) - UNICAES
    ========================================================================== */
@@ -330,6 +367,11 @@
     </style>
   </head>
   <body>
+    <a href="./index.html" class="btn-back">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Volver al inicio</span>
+    </a>
+
     <div class="slide active">
       <div class="slide-header">
         <span class="block-tag">BLOQUE PRÁCTICO: PROBLEMA 01</span>
@@ -736,7 +778,7 @@ git push -u origin main</pre>
 
               if (!canvas) {
                 throw new Error(
-                  "No se pudo generar el lienzo de la diapositiva " + (i + 1)
+                  "No se pudo generar el lienzo de la diapositiva " + (i + 1),
                 );
               }
 
@@ -764,7 +806,7 @@ git push -u origin main</pre>
             console.error("Error al generar el PDF:", error);
             alert(
               "Hubo un error al generar el PDF. Revisa la consola (F12) para más detalles:\n" +
-                error.message
+                error.message,
             );
           } finally {
             showSlide(originalIndex);

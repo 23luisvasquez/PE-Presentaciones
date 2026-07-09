@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Índice General de Presentaciones | UNICAES</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      :root {
+        --bg-dark: #020617;
+        --bg-card: #0f172a;
+        --bg-card-hover: #1e293b;
+        --cyan-accent: #06b6d4;
+        --cyan-glow: rgba(6, 182, 212, 0.25);
+        --cyan-light: #67e8f9;
+        --burgundy-unicaes: #800000;
+        --gold-unicaes: #daa520;
+
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        font-family: "Inter", sans-serif;
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1100px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .badge-university {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: var(--gold-unicaes);
+        background: rgba(218, 165, 32, 0.1);
+        border: 1px solid var(--gold-unicaes);
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        display: inline-block;
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: 36px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 8px;
+      }
+
+      p.subtitle {
+        color: var(--text-muted);
+        font-size: 15px;
+      }
+
+      /* PESTAÑAS DE PERIODOS */
+      .period-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 35px;
+      }
+
+      .tab-btn {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        padding: 10px 24px;
+        border-radius: 30px;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .tab-btn:hover {
+        border-color: var(--cyan-accent);
+        color: var(--text-main);
+      }
+
+      .tab-btn.active {
+        background: var(--cyan-accent);
+        color: #020617;
+        border-color: var(--cyan-accent);
+        box-shadow: 0 0 15px var(--cyan-glow);
+      }
+
+      /* PANELS DE CONTENIDO */
+      .tab-panel {
+        display: none;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      /* SECCIONES POR SEMANA */
+      .week-section {
+        margin-bottom: 40px;
+      }
+
+      .week-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--cyan-light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .week-title i {
+        font-size: 18px;
+        color: var(--gold-unicaes);
+      }
+
+      /* GRID DE TARJETAS */
+      .grid-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+      }
+
+      .card-link {
+        text-decoration: none;
+        color: inherit;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card-link::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--cyan-accent),
+          var(--gold-unicaes)
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .card-link:hover {
+        transform: translateY(-4px);
+        background-color: var(--bg-card-hover);
+        border-color: var(--cyan-accent);
+        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.15);
+      }
+
+      .card-link:hover::before {
+        opacity: 1;
+      }
+
+      .tag-type {
+        font-family: "Fira Code", monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 3px 10px;
+        border-radius: 12px;
+        display: inline-block;
+        margin-bottom: 12px;
+        width: fit-content;
+      }
+
+      .tag-theory {
+        background: rgba(6, 182, 212, 0.15);
+        color: var(--cyan-light);
+        border: 1px solid var(--cyan-accent);
+      }
+
+      .tag-practice {
+        background: rgba(218, 165, 32, 0.15);
+        color: var(--gold-unicaes);
+        border: 1px solid var(--gold-unicaes);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 12px;
+      }
+
+      .icon-wrapper {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cyan-light);
+        font-size: 18px;
+      }
+
+      .card-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .card-desc {
+        color: var(--text-muted);
+        font-size: 13.5px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: "Fira Code", monospace;
+        font-size: 12px;
+        color: var(--cyan-accent);
+        border-top: 1px solid var(--border-color);
+        padding-top: 14px;
+      }
+
+      /* ESTADO EN DESARROLLO */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: var(--bg-card);
+        border: 1px dashed var(--border-color);
+        border-radius: 16px;
+        color: var(--text-muted);
+      }
+
+      .empty-state i {
+        font-size: 40px;
+        color: var(--cyan-accent);
+        margin-bottom: 15px;
+      }
+
+      footer {
+        margin-top: 60px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: "Fira Code", monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <span class="badge-university"
+          >UNICAES • Programación Estructurada</span
+        >
+        <h1>Portal de Presentaciones</h1>
+        <p class="subtitle">
+          Material didáctico interactivo organizado por periodos y semanas de
+          clase
+        </p>
+      </header>
+
+      <div class="period-tabs">
+        <button
+          class="tab-btn active"
+          onclick="switchPeriod('periodo-1', event)"
+        >
+          Periodo 01
+        </button>
+        <button class="tab-btn" onclick="switchPeriod('periodo-2', event)">
+          Periodo 02
+        </button>
+        <button class="tab-btn" onclick="switchPeriod('periodo-3', event)">
+          Periodo 03
+        </button>
+      </div>
+
+      <div id="periodo-1" class="tab-panel active">
+        <section class="week-section">
+          <h2 class="week-title">
+            <i class="fa-solid fa-calendar-week"></i> Semana 01
+          </h2>
+          <div class="grid-cards">
+            <a href="./sesion_01.html" class="card-link">
+              <div>
+                <span class="tag-type tag-theory">Teoría</span>
+                <div class="card-header">
+                  <div class="icon-wrapper">
+                    <i class="fa-solid fa-book-open"></i>
+                  </div>
+                  <div class="card-title">Conceptos Básicos</div>
+                </div>
+                <p class="card-desc">
+                  Introducción a la Programación Estructurada, tipos de datos,
+                  variables y flujo de trabajo.
+                </p>
+              </div>
+              <div class="card-footer">
+                <span>Abrir Clase</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+            </a>
+
+            <a href="./pruebas_01.html" class="card-link">
+              <div>
+                <span class="tag-type tag-practice">Ejercicios Prácticos</span>
+                <div class="card-header">
+                  <div class="icon-wrapper">
+                    <i class="fa-solid fa-code"></i>
+                  </div>
+                  <div class="card-title">Guía 01 - C# y Git</div>
+                </div>
+                <p class="card-desc">
+                  Guía de 5 ejercicios prácticos en C# y control de versiones
+                  paso a paso con Git/GitHub.
+                </p>
+              </div>
+              <div class="card-footer">
+                <span>Abrir Ejercicios</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div id="periodo-2" class="tab-panel">
+        <div class="empty-state">
+          <i class="fa-solid fa-clock"></i>
+          <h3>Periodo 02 no disponible aún</h3>
+          <p>
+            Las clases de este periodo se habilitarán conforme avancemos en el
+            ciclo.
+          </p>
+        </div>
+      </div>
+
+      <div id="periodo-3" class="tab-panel">
+        <div class="empty-state">
+          <i class="fa-solid fa-clock"></i>
+          <h3>Periodo 03 no disponible aún</h3>
+          <p>
+            Las clases de este periodo se habilitarán conforme avancemos en el
+            ciclo.
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        <span>UNICAES &copy; 2026 - Programación Estructurada</span>
+      </footer>
+    </div>
+
+    <script>
+      function switchPeriod(periodId, e) {
+        // Ocultar todos los paneles
+        document.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.remove("active");
+        });
+
+        // Desactivar todos los botones
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+
+        // Activar panel seleccionado
+        document.getElementById(periodId).classList.add("active");
+
+        // Activar botón presionado
+        if (e && e.currentTarget) {
+          e.currentTarget.classList.add("active");
+        }
+      }
+    </script>
+  </body>
+</html>
