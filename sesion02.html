@@ -1,0 +1,1714 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operadores y Estructuras de Selección</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bg-dark: #0f172a;
+        --bg-card: #1e293b;
+        --bg-card-hover: #334155;
+        --cyan-accent: #06b6d4;
+        --cyan-glow: rgba(6, 182, 212, 0.25);
+        --cyan-light: #67e8f9;
+        --emerald-accent: #10b981;
+        --gold-accent: #daa520;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --code-bg: #090d16;
+        --border-color: #334155;
+        --slide-w: 1280px;
+        --slide-h: 720px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #020617;
+        font-family: "Inter", sans-serif;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        background-color: var(--bg-card);
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        margin-bottom: 20px;
+        align-self: flex-start;
+      }
+
+      .btn-back:hover {
+        color: var(--cyan-light);
+        border-color: var(--cyan-accent);
+        background-color: var(--bg-card-hover);
+        box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15);
+      }
+
+      .top-bar {
+        width: 100%;
+        max-width: var(--slide-w);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .btn-export {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        background-color: var(--bg-card);
+        color: var(--cyan-light);
+        border: 1px solid var(--cyan-accent);
+        border-radius: 10px;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .btn-export:hover:not(:disabled) {
+        background-color: var(--cyan-accent);
+        color: var(--bg-dark);
+        box-shadow: 0 4px 15px rgba(6, 182, 212, 0.25);
+      }
+
+      .btn-export:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-export i.fa-spin {
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .slide-container {
+        width: 100%;
+        max-width: var(--slide-w);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .slide {
+        width: 100%;
+        max-width: var(--slide-w);
+        min-height: var(--slide-h);
+        background-color: var(--bg-dark);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        padding: 40px 50px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      }
+
+      .slide.active {
+        display: flex;
+      }
+
+      .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--cyan-accent) 0%,
+          var(--emerald-accent) 50%,
+          var(--gold-accent) 100%
+        );
+      }
+
+      .slide-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+      }
+
+      .block-tag {
+        font-family: "Fira Code", monospace;
+        font-size: 12px;
+        color: var(--emerald-accent);
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid var(--emerald-accent);
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .slide-number {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .slide-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .slide-title i {
+        color: var(--cyan-accent);
+      }
+
+      .content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 14px;
+        overflow-y: auto;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 18px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-accent {
+        border-left: 4px solid var(--emerald-accent);
+      }
+
+      .card-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 16px;
+        color: var(--cyan-light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+      }
+
+      .message-box {
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid var(--emerald-accent);
+        border-radius: 10px;
+        padding: 14px;
+        color: #a7f3d0;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 13.5px;
+      }
+
+      .explanation-box {
+        background: rgba(6, 182, 212, 0.05);
+        border-left: 4px solid var(--cyan-accent);
+        border-radius: 0 8px 8px 0;
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+
+      .qa-box {
+        background: rgba(218, 165, 32, 0.08);
+        border: 1px solid var(--gold-accent);
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-size: 13.5px;
+      }
+
+      .qa-box .q {
+        color: var(--gold-accent);
+        font-weight: 600;
+      }
+
+      .quote-box {
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.1) 0%,
+          rgba(30, 41, 59, 0.8) 100%
+        );
+        border: 1px solid var(--cyan-accent);
+        border-radius: 10px;
+        padding: 16px;
+        color: var(--cyan-light);
+        font-style: italic;
+        font-size: 14px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      p,
+      li {
+        font-size: 14px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      strong {
+        color: var(--text-main);
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      ul li {
+        position: relative;
+        padding-left: 20px;
+      }
+
+      ul li::before {
+        content: "✔";
+        position: absolute;
+        left: 0;
+        color: var(--emerald-accent);
+        font-size: 12px;
+      }
+
+      pre {
+        background-color: var(--code-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px;
+        font-family: "Fira Code", monospace;
+        font-size: 12.5px;
+        color: var(--cyan-light);
+        overflow-x: auto;
+        line-height: 1.5;
+      }
+
+      code {
+        font-family: "Fira Code", monospace;
+        background: rgba(6, 182, 212, 0.1);
+        color: var(--cyan-light);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12.5px;
+      }
+
+      .tech-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13.5px;
+      }
+
+      .tech-table th {
+        background-color: var(--bg-card-hover);
+        color: var(--cyan-accent);
+        text-align: left;
+        padding: 10px 14px;
+        border-bottom: 2px solid var(--cyan-accent);
+        font-family: "Fira Code", monospace;
+      }
+
+      .tech-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-main);
+      }
+
+      .flow-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--code-bg);
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        gap: 10px;
+      }
+
+      .flow-step {
+        background: var(--bg-card);
+        border: 1px solid var(--cyan-accent);
+        color: var(--cyan-light);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-family: "Fira Code", monospace;
+        font-size: 12px;
+        text-align: center;
+        flex: 1;
+        min-width: 100px;
+      }
+
+      .flow-arrow {
+        color: var(--cyan-accent);
+        font-size: 16px;
+      }
+
+      .arch-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        background: var(--code-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 16px;
+      }
+
+      .arch-layer {
+        background: var(--bg-card);
+        border: 1px solid var(--cyan-accent);
+        color: var(--cyan-light);
+        padding: 8px 22px;
+        border-radius: 8px;
+        font-family: "Fira Code", monospace;
+        font-size: 12.5px;
+        text-align: center;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .arch-layer.highlight {
+        background: rgba(16, 185, 129, 0.15);
+        border-color: var(--emerald-accent);
+        color: var(--emerald-accent);
+        font-weight: 600;
+      }
+
+      .arch-down {
+        color: var(--cyan-accent);
+        font-size: 14px;
+      }
+
+      .option-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+      }
+
+      .option-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 16px;
+        text-align: center;
+        font-family: "Fira Code", monospace;
+      }
+
+      .option-letter {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        border-radius: 50%;
+        background: var(--cyan-accent);
+        color: var(--bg-dark);
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .slide-footer {
+        height: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: "Fira Code", monospace;
+      }
+
+      .nav-bar {
+        position: fixed;
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background-color: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--border-color);
+        padding: 8px 18px;
+        border-radius: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+
+      .nav-btn {
+        background-color: var(--bg-dark);
+        color: var(--cyan-light);
+        border: 1px solid var(--cyan-accent);
+        padding: 6px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .nav-btn:hover:not(:disabled) {
+        background-color: var(--cyan-accent);
+        color: var(--bg-dark);
+        box-shadow: 0 0 10px var(--cyan-glow);
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        border-color: var(--border-color);
+        color: var(--text-muted);
+      }
+
+      .nav-counter {
+        font-family: "Fira Code", monospace;
+        font-size: 13px;
+        color: var(--text-main);
+        min-width: 90px;
+        text-align: center;
+      }
+
+      .slide-solid {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      @media (max-width: 1024px) {
+        .slide {
+          min-height: auto;
+          padding: 25px 20px;
+        }
+        .slide-title {
+          font-size: 20px;
+        }
+        .flow-container {
+          flex-direction: column;
+        }
+        .flow-arrow {
+          transform: rotate(90deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <a href="#" class="btn-back">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Inicio</span>
+      </a>
+      <button class="btn-export" id="exportBtn" onclick="exportToPDF()">
+        <i class="fa-solid fa-file-pdf" id="exportIcon"></i>
+        <span id="exportLabel">Exportar PDF</span>
+      </button>
+    </div>
+
+    <div class="slide-container">
+      <!-- SLIDE 1 -->
+      <div class="slide active">
+        <div class="slide-header">
+          <span class="block-tag">Portada</span>
+          <span class="slide-number">Diapositiva 1 / 23</span>
+        </div>
+        <div class="content-area" style="text-align: center; gap: 20px">
+          <div
+            style="
+              color: var(--emerald-accent);
+              font-family: &quot;Fira Code&quot;, monospace;
+              font-size: 13px;
+              letter-spacing: 2px;
+            "
+          >
+            PROGRAMACIÓN ESTRUCTURADA CON C# · SESIÓN 03
+          </div>
+          <h1
+            style="
+              font-family: &quot;Poppins&quot;, sans-serif;
+              font-size: 34px;
+              color: var(--text-main);
+              line-height: 1.2;
+            "
+          >
+            Operadores y<br />
+            <span style="color: var(--cyan-accent)"
+              >Estructuras de Selección</span
+            >
+          </h1>
+          <div class="quote-box" style="max-width: 750px; margin: 0 auto">
+            <i
+              class="fa-solid fa-quote-left"
+              style="font-size: 18px; color: var(--gold-accent)"
+            ></i>
+            <span style="color: var(--gold-accent)"
+              >"Los programas no solo realizan cálculos; también toman
+              decisiones según la información que reciben."</span
+            >
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores y Estructuras de Selección</span>
+          <span>Portada</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Retrospectiva</span>
+          <span class="slide-number">Diapositiva 2 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-hand-sparkles"></i> ¡Bienvenidos!
+        </h2>
+        <div class="content-area">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">
+                <i class="fa-solid fa-clock-rotate-left"></i> Ya sabemos...
+              </div>
+              <ul>
+                <li>Declarar variables.</li>
+                <li>Almacenar información.</li>
+                <li>Mostrar datos en pantalla.</li>
+                <li>Capturar información desde el teclado.</li>
+              </ul>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-star"></i> La promesa de hoy
+              </div>
+              <p>
+                Hasta ahora, todos nuestros programas hacían exactamente lo
+                mismo cada vez que se ejecutaban.
+              </p>
+              <p>
+                <strong>Hoy aprenderemos</strong> a crear programas que tomen
+                decisiones dependiendo de la información ingresada por el
+                usuario.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Introducción</span>
+          <span>Bienvenida y Retrospectiva</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Objetivos</span>
+          <span class="slide-number">Diapositiva 3 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-bullseye"></i> Objetivos de la Sesión
+        </h2>
+        <div class="content-area">
+          <p>Al finalizar esta sesión serás capaz de:</p>
+          <div class="grid-3">
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-calculator"></i> Calcular
+              </div>
+              <p>
+                Utilizar operadores aritméticos para realizar cálculos
+                matemáticos.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-scale-balanced"></i> Comparar
+              </div>
+              <p>
+                Evaluar relaciones entre valores mediante operadores
+                relacionales.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-code-branch"></i> Decidir
+              </div>
+              <p>
+                Crear programas lógicos que tomen caminos distintos usando
+                <code>if</code>, <code>if-else</code> y <code>switch</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Introducción</span>
+          <span>Objetivos de la sesión</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Concepto</span>
+          <span class="slide-number">Diapositiva 4 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-brain"></i> La Lógica de las Decisiones
+        </h2>
+        <div class="content-area">
+          <p>
+            En la vida diaria tomamos decisiones constantemente basadas en
+            condiciones:
+          </p>
+          <div class="card card-accent">
+            <ul>
+              <li>Si está lloviendo → entonces llevo paraguas.</li>
+              <li>Si tengo hambre → entonces voy a comer.</li>
+              <li>
+                Si la batería está descargada → entonces conecto el cargador.
+              </li>
+            </ul>
+          </div>
+          <p>En programación es igual, siempre se sigue la estructura:</p>
+          <div class="message-box">
+            <i class="fa-solid fa-circle-info" style="font-size: 18px"></i>
+            <span
+              >Si ocurre una condición → entonces se realiza una acción.</span
+            >
+          </div>
+          <div class="flow-container">
+            <div class="flow-step">¿Llueve?</div>
+            <span class="flow-arrow">→ Sí →</span>
+            <div class="flow-step">Llevar paraguas</div>
+          </div>
+          <div class="flow-container">
+            <div class="flow-step">¿Llueve?</div>
+            <span class="flow-arrow">→ No →</span>
+            <div class="flow-step">Ir normal</div>
+          </div>
+          <div class="explanation-box">
+            Sin estas decisiones, el software sería completamente plano y
+            estático.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Fundamentos</span>
+          <span>¿Qué significa tomar decisiones?</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Concepto</span>
+          <span class="slide-number">Diapositiva 5 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-gears"></i> Concepto de Operador
+        </h2>
+        <div class="content-area">
+          <p>
+            Un <strong>operador</strong> es un símbolo que permite realizar una
+            operación sobre uno o más valores (variables o constantes).
+          </p>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-list-check"></i> ¿Para qué nos sirven?
+            </div>
+            <ul>
+              <li>Sumar dos números o calcular un promedio.</li>
+              <li>Comparar dos edades para saber quién es mayor.</li>
+              <li>
+                Comprobar si dos condiciones se cumplen al mismo tiempo (ej.
+                usuario válido Y contraseña correcta).
+              </li>
+            </ul>
+          </div>
+          <div class="explanation-box">
+            Son las herramientas fundamentales que le dan dinamismo y lógica al
+            código.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Fundamentos</span>
+          <span>¿Qué es un operador?</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 6 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Clasificación</span>
+          <span class="slide-number">Diapositiva 6 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-layer-group"></i> Clasificación de Operadores en
+          C#
+        </h2>
+        <div class="content-area">
+          <p>En esta sesión nos enfocaremos en tres grupos esenciales:</p>
+          <div class="grid-3">
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-plus-minus"></i> Aritméticos
+              </div>
+              <p>
+                Para realizar operaciones matemáticas básicas y obtener
+                residuos.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-equals"></i> Relacionales
+              </div>
+              <p>Para comparar valores y verificar igualdades o diferencias.</p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-code-fork"></i> Lógicos
+              </div>
+              <p>Para combinar múltiples condiciones en una sola evaluación.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores</span>
+          <span>Tipos de operadores</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 7 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Aritméticos</span>
+          <span class="slide-number">Diapositiva 7 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-plus-minus"></i> Operadores Aritméticos
+        </h2>
+        <div class="content-area">
+          <table class="tech-table">
+            <thead>
+              <tr>
+                <th>Operador</th>
+                <th>Significado</th>
+                <th>Ejemplo</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>+</code></td>
+                <td>Suma</td>
+                <td>5 + 3</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td><code>-</code></td>
+                <td>Resta</td>
+                <td>8 - 2</td>
+                <td>6</td>
+              </tr>
+              <tr>
+                <td><code>*</code></td>
+                <td>Multiplicación</td>
+                <td>4 * 6</td>
+                <td>24</td>
+              </tr>
+              <tr>
+                <td><code>/</code></td>
+                <td>División</td>
+                <td>20 / 5</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td><code>%</code></td>
+                <td>Residuo (Módulo)</td>
+                <td>11 % 2</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td><code>++</code></td>
+                <td>Incremento (suma 1)</td>
+                <td>edad++</td>
+                <td>edad + 1</td>
+              </tr>
+              <tr>
+                <td><code>--</code></td>
+                <td>Decremento (resta 1)</td>
+                <td>edad--</td>
+                <td>edad - 1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Aritméticos</span>
+          <span>Tabla de operadores</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 8 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Ejemplo</span>
+          <span class="slide-number">Diapositiva 8 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-code"></i> Operaciones Aritméticas en C#
+        </h2>
+        <div class="content-area">
+          <pre><code>int a = 20;
+int b = 5;
+
+Console.WriteLine(a + b); // Imprime: 25
+Console.WriteLine(a - b); // Imprime: 15
+Console.WriteLine(a * b); // Imprime: 100
+Console.WriteLine(a / b); // Imprime: 4</code></pre>
+          <div class="explanation-box">
+            Cada operador realiza una acción distinta usando las mismas
+            variables de origen. El comportamiento del programa cambia
+            únicamente al cambiar el símbolo del operador.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Aritméticos</span>
+          <span>Ejemplo práctico</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 9 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Módulo</span>
+          <span class="slide-number">Diapositiva 9 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-percent"></i> Comprendiendo el Operador Residuo
+          (%)
+        </h2>
+        <div class="content-area">
+          <div class="qa-box">
+            <div class="q">¡Error común!</div>
+            <p>
+              No realiza una división ordinaria. Lo que hace es devolver el
+              <strong>residuo (sobrante)</strong> que queda después de realizar
+              una división entera.
+            </p>
+          </div>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-hashtag"></i> Ejemplos numéricos
+            </div>
+            <ul>
+              <li>
+                10 % 2 = 0 (10 se divide exactamente entre 2, no sobra nada).
+              </li>
+              <li>11 % 2 = 1 (cabe 5 veces y sobra 1).</li>
+              <li>18 % 7 = 4 (7 × 2 = 14, y para llegar a 18 sobran 4).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Aritméticos</span>
+          <span>El operador módulo</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 10 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Ejemplo</span>
+          <span class="slide-number">Diapositiva 10 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-code"></i> Aplicación: Detectar Números Pares
+        </h2>
+        <div class="content-area">
+          <p>
+            ¿Cómo sabemos matemáticamente si un número es par? Si lo dividimos
+            entre 2 y el residuo es exactamente 0.
+          </p>
+          <pre><code>Console.Write("Ingrese un número: ");
+int numero = int.Parse(Console.ReadLine());
+
+if (<span style="background: rgba(218,165,32,0.25); padding: 1px 4px; border-radius: 4px;">numero % 2 == 0</span>)
+{
+    Console.WriteLine("Es un número par");
+}</code></pre>
+          <div class="explanation-box">
+            Evaluamos el residuo de <code>numero % 2</code>. Si es igual a 0,
+            confirmamos la paridad.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Aritméticos</span>
+          <span>Ejemplo del módulo</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 11 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Relacionales</span>
+          <span class="slide-number">Diapositiva 11 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-scale-balanced"></i> Operadores Relacionales
+          (Comparación)
+        </h2>
+        <div class="content-area">
+          <p>
+            Sirven para comparar dos valores. Responden a preguntas lógicas: ¿Es
+            mayor?, ¿Es menor?, ¿Es igual?, ¿Es diferente?
+          </p>
+          <div class="message-box">
+            <i class="fa-solid fa-circle-info" style="font-size: 18px"></i>
+            <span>
+              <strong>Regla fundamental:</strong> el resultado de cualquier
+              comparación relacional siempre será un valor booleano:
+              <strong>True</strong> (Verdadero) o
+              <strong>False</strong> (Falso).
+            </span>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Relacionales</span>
+          <span>Concepto</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 12 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Relacionales</span>
+          <span class="slide-number">Diapositiva 12 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-table"></i> Operadores Relacionales en C#
+        </h2>
+        <div class="content-area">
+          <table class="tech-table">
+            <thead>
+              <tr>
+                <th>Operador</th>
+                <th>Significado</th>
+                <th>Ejemplo</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <code
+                    style="
+                      background: rgba(218, 165, 32, 0.2);
+                      color: var(--gold-accent);
+                    "
+                    >==</code
+                  >
+                </td>
+                <td>Igual que</td>
+                <td>5 == 5</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td><code>!=</code></td>
+                <td>Diferente de</td>
+                <td>5 != 3</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td><code>&gt;</code></td>
+                <td>Mayor que</td>
+                <td>5 &gt; 8</td>
+                <td>False</td>
+              </tr>
+              <tr>
+                <td><code>&lt;</code></td>
+                <td>Menor que</td>
+                <td>3 &lt; 10</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td><code>&gt;=</code></td>
+                <td>Mayor o igual que</td>
+                <td>10 &gt;= 10</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td><code>&lt;=</code></td>
+                <td>Menor o igual que</td>
+                <td>4 &lt;= 2</td>
+                <td>False</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="explanation-box">
+            Cuidado: <code>==</code> compara igualdad; un solo <code>=</code> es
+            asignación.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Relacionales</span>
+          <span>Tabla de operadores</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 13 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Ejemplo</span>
+          <span class="slide-number">Diapositiva 13 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-magnifying-glass"></i> Análisis de Evaluación
+          Relacional
+        </h2>
+        <div class="content-area">
+          <pre><code>int edad = 20;
+Console.WriteLine(edad >= 18); // Imprime: True</code></pre>
+          <div class="card card-accent">
+            <div class="card-title">
+              <i class="fa-solid fa-diagram-project"></i> ¿Qué hace la
+              computadora tras bambalinas?
+            </div>
+            <ul>
+              <li>Sustituye la variable por su valor actual: 20 &gt;= 18.</li>
+              <li>
+                Se hace la pregunta: ¿El número 20 es mayor o igual que 18?
+              </li>
+              <li>
+                Como la respuesta es afirmativa, el resultado lógico es True.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Relacionales</span>
+          <span>Ejemplo de comparación</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 14 -->
+      <div class="slide">
+        <div
+          class="content-area slide-solid"
+          style="justify-content: center; align-items: center; height: 100%"
+        >
+          <div
+            style="
+              color: var(--gold-accent);
+              font-family: &quot;Fira Code&quot;, monospace;
+              font-size: 14px;
+              letter-spacing: 3px;
+              margin-bottom: 10px;
+            "
+          >
+            TRANSICIÓN
+          </div>
+          <h1
+            style="
+              font-family: &quot;Poppins&quot;, sans-serif;
+              font-size: 44px;
+              color: var(--text-main);
+            "
+          >
+            <i
+              class="fa-solid fa-flask"
+              style="color: var(--emerald-accent)"
+            ></i>
+            ¡Practiquemos!
+          </h1>
+          <p style="max-width: 600px; margin-top: 14px; font-size: 15px">
+            Pongamos a prueba los conceptos de operadores aritméticos, módulo y
+            lógica relacional mediante retos reales de código.
+          </p>
+        </div>
+        <div class="slide-footer">
+          <span>Transición</span>
+          <span>Sección Práctica</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 15 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Lógicos</span>
+          <span class="slide-number">Diapositiva 15 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-code-fork"></i> Operadores Lógicos
+        </h2>
+        <div class="content-area">
+          <p>Permiten combinar varias comparaciones en una sola condición.</p>
+          <div class="grid-3">
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-plug"></i> && (AND / Y)
+              </div>
+              <p>
+                Da True únicamente si todas las condiciones individuales son
+                verdaderas.
+              </p>
+              <pre><code>edad >= 18 && tieneDNI == true</code></pre>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-code-branch"></i> || (OR / O)
+              </div>
+              <p>Da True si al menos una de las condiciones es verdadera.</p>
+              <pre><code>esViernes || esFinDeSemana</code></pre>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-arrows-turn-to-dots"></i> ! (NOT / NO)
+              </div>
+              <p>
+                Invierte el valor lógico. Convierte True en False y viceversa.
+              </p>
+              <pre><code>!(edad < 18)</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Operadores Lógicos</span>
+          <span>Teoría para los retos</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 16 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Ejercicio 1</span>
+          <span class="slide-number">Diapositiva 16 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-1"></i> Ejercicio Práctico 1: Cálculos y
+          Residuos
+        </h2>
+        <div class="content-area">
+          <div class="qa-box">
+            <div class="q">Enunciado</div>
+            <p>
+              Escribe un programa en C# que solicite al usuario ingresar un
+              número entero por teclado. El programa debe verificar y mostrar en
+              pantalla si el número ingresado es
+              <strong>múltiplo de 5</strong> o no lo es.
+            </p>
+          </div>
+          <div class="explanation-box">
+            <strong>Teoría aplicada:</strong> un número es múltiplo de 5 si al
+            dividirlo entre 5, la división es exacta (su residuo es 0).
+          </div>
+          <pre><code>Console.Write("Ingrese un número entero: ");
+int numero = int.Parse(Console.ReadLine());
+
+if (numero % 5 == 0)
+{
+    Console.WriteLine("El número es múltiplo de 5.");
+}
+else
+{
+    Console.WriteLine("El número NO es múltiplo de 5.");
+}</code></pre>
+        </div>
+        <div class="slide-footer">
+          <span>Ejercicio 1</span>
+          <span>El múltiplo de 5</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 17 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">if / if-else</span>
+          <span class="slide-number">Diapositiva 17 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-code-branch"></i> Control de Flujo: if e if-else
+        </h2>
+        <div class="content-area">
+          <div class="grid-2">
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-signs-post"></i> if simple
+              </div>
+              <p>
+                Ejecuta un bloque de instrucciones si la condición es verdadera.
+                Si es falsa, simplemente lo ignora.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-shuffle"></i> if-else doble
+              </div>
+              <p>
+                Define un camino a seguir cuando la condición se cumple (if) y
+                un camino alternativo obligatorio para cuando no se cumple
+                (else).
+              </p>
+            </div>
+          </div>
+          <pre><code>if (condicion) {
+    // Código si es verdadero
+} else {
+    // Código si es falso
+}</code></pre>
+        </div>
+        <div class="slide-footer">
+          <span>Estructuras de Selección</span>
+          <span>if / if-else</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 18 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Ejercicio 2</span>
+          <span class="slide-number">Diapositiva 18 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-2"></i> Ejercicio Práctico 2: Selección Múltiple
+          (if-else if)
+        </h2>
+        <div class="content-area">
+          <div class="qa-box">
+            <div class="q">Enunciado</div>
+            <p>
+              Desarrolla un sistema que pida a un estudiante su calificación
+              final de un examen (rango 0 a 20) e imprima el desempeño:
+            </p>
+          </div>
+          <div class="grid-4">
+            <div class="card" style="border-left: 4px solid #22c55e">
+              <p style="color: #22c55e; font-weight: 600">
+                18 a 20 → Excelente
+              </p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--cyan-accent)">
+              <p style="color: var(--cyan-light); font-weight: 600">
+                14 a 17 → Bueno
+              </p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--gold-accent)">
+              <p style="color: var(--gold-accent); font-weight: 600">
+                11 a 13 → Regular
+              </p>
+            </div>
+            <div class="card" style="border-left: 4px solid #ef4444">
+              <p style="color: #f87171; font-weight: 600">
+                Menor a 11 → Deficiente
+              </p>
+            </div>
+          </div>
+          <pre><code>Console.Write("Calificación (0-20): ");
+int nota = int.Parse(Console.ReadLine());
+
+if (nota >= 18 && nota <= 20) {
+    Console.WriteLine("Excelente");
+} else if (nota >= 14) {
+    Console.WriteLine("Bueno");
+} else if (nota >= 11) {
+    Console.WriteLine("Regular");
+} else {
+    Console.WriteLine("Deficiente");
+}</code></pre>
+        </div>
+        <div class="slide-footer">
+          <span>Ejercicio 2</span>
+          <span>Clasificación de calificaciones</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 19 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">switch</span>
+          <span class="slide-number">Diapositiva 19 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-list-ol"></i> Estructura de Control: switch
+        </h2>
+        <div class="content-area">
+          <p>
+            Se utiliza para simplificar el código cuando tenemos que comparar
+            una única variable contra múltiples valores enteros, caracteres o
+            cadenas constantes. Evita tener que escribir demasiados
+            <code>else if</code> seguidos.
+          </p>
+          <div class="grid-3">
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-tag"></i> case [valor]
+              </div>
+              <p>El caso que queremos comparar.</p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-door-open"></i> break;
+              </div>
+              <p>
+                Obligatorio para salir del bloque del switch tras ejecutar un
+                caso.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-shield"></i> default
+              </div>
+              <p>
+                Se ejecuta si ningún caso anterior coincide (equivalente al
+                else).
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Estructuras de Selección</span>
+          <span>switch</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 20 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Ejercicio 3</span>
+          <span class="slide-number">Diapositiva 20 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-3"></i> Ejercicio Práctico 3: Aplicando switch
+        </h2>
+        <div class="content-area">
+          <div class="qa-box">
+            <div class="q">Enunciado</div>
+            <p>
+              Solicita dos números reales y muestra un menú (1. Sumar, 2.
+              Restar). El usuario elige una opción y el programa ejecuta el
+              cálculo correspondiente usando <code>switch</code>. Cualquier otro
+              valor muestra "Opción inválida".
+            </p>
+          </div>
+          <pre><code>Console.Write("Num 1: "); double n1 = double.Parse(Console.ReadLine());
+Console.Write("Num 2: "); double n2 = double.Parse(Console.ReadLine());
+Console.Write("Elija opción (1-Suma, 2-Resta): "); int op = int.Parse(Console.ReadLine());
+
+switch (op) {
+    case 1:
+        Console.WriteLine($"Suma: {n1 + n2}");
+        break;
+    case 2:
+        Console.WriteLine($"Resta: {n1 - n2}");
+        break;
+    default:
+        Console.WriteLine("Opción inválida.");
+        break;
+}</code></pre>
+        </div>
+        <div class="slide-footer">
+          <span>Ejercicio 3</span>
+          <span>Menú de calculadora básica</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 21 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Desafío Final</span>
+          <span class="slide-number">Diapositiva 21 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-trophy"></i> Desafío Final: Beca Universitaria
+        </h2>
+        <div class="content-area">
+          <div class="qa-box">
+            <div class="q">Reto</div>
+            <p>
+              El departamento de becas otorga financiamiento basándose en dos
+              condiciones estrictas:
+            </p>
+            <ul style="margin-top: 8px">
+              <li>El alumno debe tener un promedio de al menos 17.</li>
+              <li>La edad del alumno debe ser menor a 25 años.</li>
+            </ul>
+          </div>
+          <div class="explanation-box">
+            Diseña un programa que pida ambos datos, use operadores relacionales
+            para las validaciones, un operador lógico para unirlas, y un
+            <code>if-else</code> para aprobar o rechazar la solicitud.
+          </div>
+          <pre><code>Console.Write("Promedio: "); double promedio = double.Parse(Console.ReadLine());
+Console.Write("Edad: "); int edad = int.Parse(Console.ReadLine());
+
+if (promedio >= 17 && edad < 25) {
+    Console.WriteLine("¡Felicidades! Beca aprobada.");
+} else {
+    Console.WriteLine("Solicitud denegada. No cumple los requisitos.");
+}</code></pre>
+        </div>
+        <div class="slide-footer">
+          <span>Desafío Final</span>
+          <span>Beca universitaria</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 22 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Conclusiones</span>
+          <span class="slide-number">Diapositiva 22 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-list-check"></i> Conclusiones de la Sesión
+        </h2>
+        <div class="content-area">
+          <div class="grid-3">
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-calculator"></i> Cálculo
+              </div>
+              <p>
+                Los operadores aritméticos son la base de los algoritmos. El
+                operador residuo (%) es indispensable para evaluar patrones
+                numéricos alternos (pares, múltiplos).
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-scale-balanced"></i> Comparación
+              </div>
+              <p>
+                Los operadores relacionales establecen condiciones lógicas que
+                se traducen en un tipo bool (true o false).
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title">
+                <i class="fa-solid fa-code-branch"></i> Control de Flujo
+              </div>
+              <p>
+                Con if, if-else y switch tomamos el control del flujo lógico del
+                código, logrando programas interactivos e inteligentes.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Cierre</span>
+          <span>Conclusiones</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 23 -->
+      <div class="slide">
+        <div class="slide-header">
+          <span class="block-tag">Cierre</span>
+          <span class="slide-number">Diapositiva 23 / 23</span>
+        </div>
+        <h2 class="slide-title">
+          <i class="fa-solid fa-flag-checkered"></i> ¿Preguntas o Dudas?
+        </h2>
+        <div class="content-area" style="text-align: center; gap: 20px">
+          <div class="message-box" style="justify-content: center">
+            <i class="fa-solid fa-circle-question" style="font-size: 22px"></i>
+            <span style="font-size: 15px"
+              >Espacio para resolver dudas sobre los operadores y las
+              estructuras de selección vistas hoy.</span
+            >
+          </div>
+          <div
+            class="card card-accent"
+            style="max-width: 500px; margin: 0 auto"
+          >
+            <div class="card-title" style="justify-content: center">
+              <i class="fa-solid fa-arrow-right"></i> Próxima sesión
+            </div>
+            <p style="text-align: center">
+              Estructuras repetitivas (Bucles y Ciclos en C#).
+            </p>
+          </div>
+          <p style="font-size: 16px; color: var(--text-main); font-weight: 600">
+            ¡Muchas gracias por su atención!
+          </p>
+        </div>
+        <div class="slide-footer">
+          <span>Fin de la Sesión</span>
+          <span>¡Gracias!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+        <i class="fa-solid fa-chevron-left"></i> Anterior
+      </button>
+      <span class="nav-counter" id="slideCounter">1 / 23</span>
+      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+        Siguiente <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+      const slideCounter = document.getElementById("slideCounter");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+
+      function updateSlide() {
+        slides.forEach((slide, index) => {
+          slide.classList.toggle("active", index === currentSlide);
+        });
+
+        slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === slides.length - 1;
+      }
+
+      function changeSlide(direction) {
+        if (
+          currentSlide + direction >= 0 &&
+          currentSlide + direction < slides.length
+        ) {
+          currentSlide += direction;
+          updateSlide();
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === "Space") {
+          changeSlide(1);
+        } else if (e.key === "ArrowLeft") {
+          changeSlide(-1);
+        }
+      });
+
+      updateSlide();
+
+      // ===== EXPORTACIÓN A PDF =====
+      async function exportToPDF() {
+        const exportBtn = document.getElementById("exportBtn");
+        const exportIcon = document.getElementById("exportIcon");
+        const exportLabel = document.getElementById("exportLabel");
+        const originalSlide = currentSlide;
+
+        exportBtn.disabled = true;
+        exportIcon.className = "fa-solid fa-spinner fa-spin";
+
+        try {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "px",
+            format: [1280, 720],
+          });
+
+          for (let i = 0; i < slides.length; i++) {
+            exportLabel.textContent = `Generando ${i + 1}/${slides.length}...`;
+
+            currentSlide = i;
+            updateSlide();
+
+            await new Promise((resolve) => requestAnimationFrame(resolve));
+            await new Promise((resolve) => setTimeout(resolve, 50));
+
+            const slideEl = slides[i];
+            const canvas = await html2canvas(slideEl, {
+              scale: 2,
+              backgroundColor: "#0f172a",
+              useCORS: true,
+            });
+
+            const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+            if (i > 0) {
+              pdf.addPage([1280, 720], "landscape");
+            }
+            pdf.addImage(imgData, "JPEG", 0, 0, 1280, 720);
+          }
+
+          pdf.save("Operadores-y-Estructuras-de-Seleccion.pdf");
+        } catch (err) {
+          console.error("Error al exportar PDF:", err);
+          alert("Ocurrió un error al generar el PDF. Revisa la consola.");
+        } finally {
+          currentSlide = originalSlide;
+          updateSlide();
+          exportBtn.disabled = false;
+          exportIcon.className = "fa-solid fa-file-pdf";
+          exportLabel.textContent = "Exportar PDF";
+        }
+      }
+    </script>
+  </body>
+</html>
